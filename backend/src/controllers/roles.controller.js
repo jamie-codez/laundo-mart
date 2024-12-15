@@ -112,7 +112,10 @@ export const deleteRole = async (req, res) => {
         const role = await Role.findOne({name});
         if (!role){
             const newRole = new Role({name,description:`Default ${name} role.`})
+            await newRole.save()
         }
     })
     console.log("Default roles created successfully.")
 })()
+
+
