@@ -22,8 +22,11 @@ const App: React.FC = () => {
                         <Route path={"/users"} element={<SkeletonLayout><UsersPage/></SkeletonLayout>}/>
                         <Route path={"/roles"} element={<SkeletonLayout><RolesPage/></SkeletonLayout>}/>
                         <Route path={"/tickets"} element={<SkeletonLayout><TicketsPage/></SkeletonLayout>}/>
-                        <Route path={"/payments"} element={<SkeletonLayout><>Coming soon</></SkeletonLayout>}/>
-                        <Route path={"/services"} element={<SkeletonLayout><>Coming soon</></SkeletonLayout>}/>
+                        <Route path={"/payments"} element={<SkeletonLayout>
+                            <div className={"w-[80vw] flex justify-center items-center font-bold text-xl"}>Coming soon 😊</div>
+                        </SkeletonLayout>}/>
+                        <Route path={"/services"} element={<SkeletonLayout>
+                            <div className={"w-[80vw] flex justify-center items-center font-bold text-xl"}>Coming soon 😊</div></SkeletonLayout>}/>
                         <Route path="*" element={<NotFound/>}/>
                     </Route>
                     <Route path="/login" element={<LoginPage/>}/>

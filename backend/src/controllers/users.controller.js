@@ -121,7 +121,7 @@ export const updateUser = async (req, res,next) => {
             statusMessage: getReasonPhrase(StatusCodes.BAD_REQUEST),
             message: `id is required.`,
         })
-        const {fullName, email, roles, password} = req.body;
+        const {fullName, email, roles,password} = req.body;
         if (!fullName || !email) {
             return res.status(StatusCodes.BAD_REQUEST).send({
                 statusCode: StatusCodes.BAD_REQUEST,
@@ -154,7 +154,7 @@ export const updateUser = async (req, res,next) => {
         if (password) {
             update.password = await hash(password, 10)
         }
-        const user = await User.findOneAndUpdate({_id: id}, {...update, fullName, email, roles})
+        await User.findOneAndUpdate({_id: id}, {$set:{...update, fullName, email, roles:rolesList}})
         const doc = await User.findOne({_id: id});
         return res.status(StatusCodes.CREATED).send({
             statusCode: StatusCodes.CREATED,

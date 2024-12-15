@@ -83,12 +83,12 @@ export const updateTicket = async (req, res, next) => {
                 message: "id is required",
             })
         }
-        const {clientId, serviceId, description, amount} = req.body;
-        if (!clientId || !serviceId || !description || !amount) {
+        const requestBody = req.body;
+        if (!requestBody) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 statusCode: StatusCodes.BAD_REQUEST,
                 statusMessage: getReasonPhrase(StatusCodes.BAD_REQUEST),
-                message: "clientId,serviceId,description and amount are required",
+                message: "Request body is required."
             })
         }
         const ticket = await Ticket.findOne({_id: id});
@@ -99,23 +99,7 @@ export const updateTicket = async (req, res, next) => {
                 message: `Ticket with id ${clientId} not found.`,
             })
         }
-        const client = await Client.findOne({_id: clientId});
-        if (!client) {
-            return res.status(StatusCodes.NOT_FOUND).json({
-                statusCode: StatusCodes.NOT_FOUND,
-                statusMessage: getReasonPhrase(StatusCodes.NOT_FOUND),
-                message: `Client with id ${clientId} not found.`,
-            })
-        }
-        const service = await Service.findOne({_id: serviceId});
-        if (!service) {
-            return res.status(StatusCodes.NOT_FOUND).json({
-                statusCode: StatusCodes.NOT_FOUND,
-                statusMessage: getReasonPhrase(StatusCodes.NOT_FOUND),
-                message: `Service with id ${clientId} not found.`,
-            })
-        }
-        const ticketUpdate = await Ticket.findOneAndUpdate({_id:id},{$set:{client, service, description, amount}})
+        const ticketUpdate = await Ticket.findOneAndUpdate({_id:id},{$set:{...requestBody}})
         if (!ticketUpdate) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
             statusMessage: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),

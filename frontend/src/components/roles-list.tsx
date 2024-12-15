@@ -1,13 +1,11 @@
 import {useState} from "react";
-import {ChevronLeft, ChevronRight, Plus, TrashIcon, Users} from "lucide-react";
+import {ChevronLeft, ChevronRight, EditIcon, Plus, TrashIcon, Users} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {toast} from "@/hooks/use-toast.ts";
 
 type Role = {
@@ -26,8 +24,12 @@ type RoleListProps = {
 export default function RolesList({ initialUsers, totalUsers, initialPage }: RoleListProps) {
     const [currentPage, setCurrentPage] = useState(initialPage)
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const usersPerPage = 10
     const totalPages = Math.ceil(totalUsers / usersPerPage)
+    const [editId,setEditId] = useState("")
+    const [editTitle,setEditTitle] = useState("")
+    const [editDescription,setEditDescription] = useState("")
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage)
@@ -52,6 +54,29 @@ export default function RolesList({ initialUsers, totalUsers, initialPage }: Rol
         const data = await response.json();
         if (response.ok){
             toast({title:"Role created successfully."})
+        }else {
+            toast({title:data.message})
+        }
+    }
+
+    const handleUpdateTicket = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        const formData = new FormData(event.currentTarget)
+        const newTicket = {
+            name: formData.get('name') as string,
+            description: formData.get('description') as string,
+        }
+        const response = await fetch(`http://localhost:3000/api/v1/roles/${editId}`, {
+            method: "PUT",
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization':`Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify(newTicket)
+        })
+        const data = await response.json();
+        if (response.ok){
+            toast({title:"Role update successfully."})
         }else {
             toast({title:data.message})
         }
@@ -107,6 +132,24 @@ export default function RolesList({ initialUsers, totalUsers, initialPage }: Rol
                             </form>
                         </DialogContent>
                     </Dialog>
+                    <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Edit Role</DialogTitle>
+                            </DialogHeader>
+                            <form onSubmit={handleUpdateTicket} className="space-y-4">
+                                <div>
+                                    <Label htmlFor="name">Name</Label>
+                                    <Input id="name" name="name" value={editTitle} onChange={e=>setEditTitle(e.target.value)} required/>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                    <Label htmlFor="description">Description</Label>
+                                    <textarea className={"border-2 rounded-sm px-2 py-1"} id="description" name="description" value={editDescription} onChange={e=>setEditDescription(e.target.value)} required/>
+                                </div>
+                                <Button type="submit">Save Role</Button>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
             <div className="bg-background rounded-md border">
@@ -124,7 +167,15 @@ export default function RolesList({ initialUsers, totalUsers, initialPage }: Rol
                                 <TableCell className="font-medium">{user.name}</TableCell>
                                 <TableCell className="font-medium">{user.description}</TableCell>
                                 <TableCell>{user.createdAt}</TableCell>
-                                <TableCell><TrashIcon onClick={()=>deleteRole(user._id)} /></TableCell>
+                                <TableCell className={"flex flex-row space-x-2"}>
+                                    <EditIcon className={"text-blue-500 h-5 w-5"} onClick={()=>{
+                                        setIsEditDialogOpen(true)
+                                        setEditId(user._id)
+                                        setEditTitle(user.name)
+                                        setEditDescription(user.description)
+                                    }} />
+                                    <TrashIcon className={"text-red-500 h-5 w-5"} onClick={()=>deleteRole(user._id)} />
+                                </TableCell>
                             </TableRow>))}
                     </TableBody>
                 </Table>

@@ -72,7 +72,7 @@ export const updateRole = async (req, res) => {
         statusMessage: getReasonPhrase(StatusCodes.BAD_REQUEST),
         message: `name and description required.`,
     })
-    const role = await Role.findOneAndDelete({_id: id}, {name, description});
+    const role = await Role.findOneAndUpdate({_id: id}, {$set:{name, description}});
     if (!role) return res.status(StatusCodes.NOT_FOUND).json({
         statusCode: StatusCodes.NOT_FOUND,
         statusMessage: getReasonPhrase(StatusCodes.NOT_FOUND),
