@@ -1,10 +1,10 @@
 import {Suspense, useCallback, useEffect, useState} from "react";
 import TicketList from "@/components/ticket-list.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
+import {toast} from "@/hooks/use-toast.ts";
 
 export default function TicketsPage() {
     const [tickets, setTickets] = useState([])
-    const [error, setError] = useState([])
 
     const getTickets = useCallback(async () => {
         const response = await fetch("http://localhost:3000/api/v1/tickets",{
@@ -18,7 +18,7 @@ export default function TicketsPage() {
         if (response.ok) {
             setTickets(data.data);
         }else {
-            setError(data.message);
+            toast({title:data.message});
         }
     },[tickets])
 

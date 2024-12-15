@@ -1,15 +1,12 @@
-import UserList from "@/components/users-list.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
 import {Suspense, useCallback, useEffect, useState} from "react";
 import RolesList from "@/components/roles-list.tsx";
+import {toast} from "@/hooks/use-toast.ts";
 
 export const RolesPage = () => {
     const [users, setUsers] = useState<any>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
 
     const userList = useCallback(async () => {
-        setLoading(true);
         const response = await fetch("http://localhost:3000/api/v1/roles", {
             method: 'GET', headers: {
                 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -19,9 +16,8 @@ export const RolesPage = () => {
         if (response.ok) {
             setUsers(data.data);
         } else {
-            setError(data.message);
+            toast({title:data.message});
         }
-        setLoading(false);
     }, [users])
 
     useEffect(() => {
