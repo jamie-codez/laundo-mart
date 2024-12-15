@@ -5,7 +5,6 @@ import {NavMain} from "@/components/nav-main"
 import {NavUser} from "@/components/nav-user"
 import {TeamSwitcher} from "@/components/team-switcher"
 import {Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail,} from "@/components/ui/sidebar"
-import {useAuth} from "@/providers/AuthContext.tsx";
 
 // This is sample data.
 const data = {
@@ -79,7 +78,6 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {user} = useAuth()
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -91,7 +89,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/*<NavProjects projects={data.settings} />*/}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

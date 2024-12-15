@@ -191,6 +191,7 @@ export const deleteUser = async (req, res,next) => {
     }
 }
 
+
 (async ()=>{
     const adminUser = await User.findOne({fullName:"admin"})
     if (!adminUser){

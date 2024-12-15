@@ -1,10 +1,10 @@
-import {useCallback, useEffect, useState} from "react";
+import {useState} from "react";
 import {Badge} from "@/components/ui/badge.tsx";
 import {Table, TableBody, TableCell, TableHead} from "./ui/table";
 import {TableHeader, TableRow} from "@/components/ui/table.tsx";
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "./ui/dialog";
 import {Button} from "@/components/ui/button.tsx";
-import {ChevronLeft, ChevronRight, DeleteIcon, Edit, EditIcon, Plus, TrashIcon} from "lucide-react";
+import {ChevronLeft, ChevronRight, EditIcon, Plus, TrashIcon} from "lucide-react";
 import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectValue} from "./ui/select";
@@ -219,7 +219,7 @@ export default function TicketList({initialTickets, totalTickets, initialPage}: 
                             </div>
                             <div>
                                 <Label htmlFor="service">Service</Label>
-                                <Select name="service" defaultValue={editService==="laundry"?"Laundry":}>
+                                <Select name="service" defaultValue={servc}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select service"/>
                                     </SelectTrigger>
