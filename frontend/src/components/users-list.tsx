@@ -117,7 +117,7 @@ export default function UserList({initialUsers, totalUsers, initialPage}: UserLi
                     <DialogTrigger asChild>
                         <Button>
                             <Plus className="h-4 w-4 mr-2"/>
-                            Create Ticket
+                            Create New User
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
