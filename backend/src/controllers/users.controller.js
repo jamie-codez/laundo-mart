@@ -197,8 +197,8 @@ export const deleteUser = async (req, res,next) => {
     if (!adminUser){
         const user = await Role.findOne({name:"user"})
         const admin = await Role.findOne({name:"admin"});
-        const hash = await hash("Password123",10)
-        const newAdminUser = new User({fullName:"admin",email:"admin@laundro.com",roles:[user,admin],password:hash})
+        const hashPassword = await hash("Password123",10)
+        const newAdminUser = new User({fullName:"admin",email:"admin@laundro.com",roles:[user,admin],password:hashPassword})
         await newAdminUser.save()
     }
     console.log("Default admin user created successfully.")
