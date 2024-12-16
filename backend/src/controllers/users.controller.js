@@ -19,9 +19,14 @@ export const createUser = async (req, res) => {
         message: `User with email: ${email} already exists.`
     })
     let rolesList = []
+    let rolesNameList = []
+    const rolesIsList = roles.includes(",")
+    if (rolesIsList){
+        rolesNameList = roles.split(",")
+    }
     if (roles) {
         rolesList = await Promise.all(
-            roles.map(async (name) => {
+            rolesNameList.map(async (name) => {
                 const rl = await Role.findOne({name});
                 if (!rl) return res.status(StatusCodes.NOT_FOUND).send({
                     statusCode: StatusCodes.NOT_FOUND,
